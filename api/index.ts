@@ -5,12 +5,16 @@ import cors from 'cors';
 import { boomErrorHandler, errorHandler, zodErrorHandler } from './middlewares';
 import { Router } from './routes';
 import { configureTimezone } from './config';
+import { bigIntToStringMiddleware } from './middlewares/bigIntToString.middleware';
 
 const app = express();
 
 config();
 
 configureTimezone();
+
+// Usar el middleware globalmente
+app.use(bigIntToStringMiddleware);
 
 // json parser
 app.use(express.json());
