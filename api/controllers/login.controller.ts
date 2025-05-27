@@ -53,7 +53,7 @@ export const login: TMiddlewareParams = async (_req, res, next) => {
                 idusuario: user.id,
                 token,
                 fechaexpiracion: expiration.toJSDate(),
-                fechainser: fechaActual.toJSDate(),
+                fechainsert: fechaActual.toJSDate(),
                 fechaupdate: fechaActual.toJSDate()
             }
         });
