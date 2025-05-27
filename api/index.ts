@@ -4,10 +4,13 @@ import cors from 'cors';
 
 import { boomErrorHandler, errorHandler, zodErrorHandler } from './middlewares';
 import { Router } from './routes';
+import { configureTimezone } from './config';
 
 const app = express();
 
 config();
+
+configureTimezone();
 
 // json parser
 app.use(express.json());
