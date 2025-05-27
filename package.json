@@ -1,9 +1,9 @@
 {
-  "name": "nodejs-minimal-template-v1",
+  "name": "backend-pasta-la-piamontesa",
   "version": "1.0.0",
   "main": "api/index.ts",
-  "author": "Octavio Cossy Torquati (ovct)",
-  "description": "Node.js Minimal Template v1.",
+  "author": "Antonella Reviriego",
+  "description": "Backend pasta la piamontesa",
   "scripts": {
     "build": "npx tsc",
     "postinstall": "prisma generate",
@@ -12,11 +12,7 @@
 
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name",
-    "prisma:deploy": "prisma migrate deploy",
-    "prisma:seed": "ts-node-dev prisma/seed.ts",
-
-    "docker:up": "docker compose up -d",
-    "docker:down": "docker compose down"
+    "prisma:deploy": "prisma migrate deploy"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

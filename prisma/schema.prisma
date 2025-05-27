@@ -8,10 +8,94 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Task {
-  id        String   @id @default(uuid())
-  title     String
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model composicionproducto {
+  id          BigInt   @id @default(autoincrement())
+  idproducto  BigInt
+  idinsumo    BigInt
+  cantidad    Decimal  @db.Decimal(18, 2)
+  enable      Boolean  @default(true)
+  fechainsert DateTime @default(now()) @db.Timestamptz(6)
+  fechaupdate DateTime @default(now()) @db.Timestamptz(6)
+  insumo      insumo   @relation(fields: [idinsumo], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_composicion_insumo")
+  producto    producto @relation(fields: [idproducto], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_composicion_producto")
+}
+
+model insumo {
+  id                  BigInt                @id @default(autoincrement())
+  nombre              String                @db.VarChar(255)
+  unidadmedida        String                @db.VarChar(20)
+  preciounitario      Decimal               @db.Decimal(18, 2)
+  enable              Boolean               @default(true)
+  fechainsert         DateTime              @default(now()) @db.Timestamptz(6)
+  fechaupdate         DateTime              @default(now()) @db.Timestamptz(6)
+  composicionproducto composicionproducto[]
+}
+
+model permiso {
+  id          BigInt       @id @default(autoincrement())
+  descripcion String       @db.VarChar(255)
+  enable      Boolean      @default(true)
+  fechainsert DateTime     @default(now()) @db.Timestamptz(6)
+  fechaupdate DateTime     @default(now()) @db.Timestamptz(6)
+  isConfig    Boolean      @default(false)
+  rolpermiso  rolpermiso[]
+}
+
+model producto {
+  id                  BigInt                @id @default(autoincrement())
+  nombre              String                @db.VarChar(255)
+  descripcion         String?               @db.VarChar(255)
+  porcentajeganancia  Decimal               @db.Decimal(5, 2)
+  costototal          Decimal?              @db.Decimal(18, 2)
+  precioventa         Decimal?              @db.Decimal(18, 2)
+  enable              Boolean               @default(true)
+  fechainsert         DateTime              @default(now()) @db.Timestamptz(6)
+  fechaupdate         DateTime              @default(now()) @db.Timestamptz(6)
+  composicionproducto composicionproducto[]
+}
+
+model roles {
+  id          BigInt       @id @default(autoincrement())
+  descripcion String       @db.VarChar(255)
+  enable      Boolean      @default(true)
+  fechainsert DateTime     @default(now()) @db.Timestamptz(6)
+  fechaupdate DateTime     @default(now()) @db.Timestamptz(6)
+  rolpermiso  rolpermiso[]
+  usuarios    usuarios[]
+}
+
+model rolpermiso {
+  id          BigInt   @id @default(autoincrement())
+  idrol       BigInt
+  idpermiso   BigInt
+  enable      Boolean  @default(true)
+  fechainsert DateTime @default(now()) @db.Timestamptz(6)
+  fechaupdate DateTime @default(now()) @db.Timestamptz(6)
+  permiso     permiso  @relation(fields: [idpermiso], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_rolpermiso_permiso")
+  roles       roles    @relation(fields: [idrol], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_rolpermiso_rol")
+}
+
+model session {
+  id              BigInt    @id @default(autoincrement())
+  idusuario       BigInt
+  token           String    @db.VarChar(50)
+  fechainser      DateTime  @default(now()) @db.Timestamptz(6)
+  fechaupdate     DateTime  @default(now()) @db.Timestamptz(6)
+  fechaexpiracion DateTime? @db.Timestamptz(6)
+  usuarios        usuarios  @relation(fields: [idusuario], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_session_usuario")
+}
+
+model usuarios {
+  id          BigInt    @id @default(autoincrement())
+  nombre      String    @db.VarChar(255)
+  apellido    String    @db.VarChar(255)
+  usuario     String    @db.VarChar(255)
+  password    String
+  email       String
+  idrol       BigInt
+  enable      Boolean   @default(true)
+  fechainsert DateTime  @default(now()) @db.Timestamptz(6)
+  fechaupdate DateTime  @default(now()) @db.Timestamptz(6)
+  session     session[]
+  roles       roles     @relation(fields: [idrol], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_usuario_rol")
 }

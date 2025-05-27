@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "nodejs-minimal-template-v1",
+  "name": "backend-pasta-la-piamontesa",
   "builds": [
     {
       "src": "./api/index.ts",
