@@ -11,9 +11,6 @@ importers:
       '@hapi/boom':
         specifier: ^10.0.1
         version: 10.0.1
-      '@types/luxon':
-        specifier: ^3.6.2
-        version: 3.6.2
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -45,6 +42,9 @@ importers:
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.0
+      '@types/luxon':
+        specifier: ^3.6.2
+        version: 3.6.2
       '@types/node':
         specifier: ^22.10.7
         version: 22.10.7
