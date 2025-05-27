@@ -5,6 +5,7 @@ import { SecurityService } from '../services/security.service';
 import { TMiddlewareParams } from "../models/middleware.model";
 import { LOGIN_SCHEMA } from '../schemas';
 import { DateTime } from "luxon";
+import { LOGOUT_SCHEMA } from '../schemas/login.schema';
 
 export const login: TMiddlewareParams = async (_req, res, next) => {
     try {
@@ -62,6 +63,28 @@ export const login: TMiddlewareParams = async (_req, res, next) => {
         return next(error);
     }
 };
+
+export const logout: TMiddlewareParams = async (_req, res, next) => {
+    try {
+        const parsed = LOGOUT_SCHEMA.safeParse({ body: _req.body });
+
+        if (!parsed.success) {
+            return res.status(400).json({ msg: 'Datos inválidos', errors: parsed.error.format() });
+        }
+
+        const { id, username, token } = parsed.data.body;
+        const user = await Prisma.session.findFirst({where: { idusuario: id }});
+
+        if (!user) return null;
+
+        await Prisma.session.deleteMany({ where: { idusuario: id }});
+
+        return res.status(200).json(true);
+    } catch (error) {
+        return next(error);
+    }
+};
+
 
 async function buildSessionDTO(session: any, user: any) {   
     let objetoSesion = {
