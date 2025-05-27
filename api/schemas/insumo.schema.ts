@@ -3,8 +3,8 @@ import { z } from 'zod';
 const properties = {
   nombreInusmo: z.string({ required_error: 'El nombre del insumo es obligatorio.' }),
   precioInusmo: z.number({ required_error: 'El precio del insumo es obligatorio.' }),
-  unidadMedida: z.boolean({ required_error: 'Completed is required' }),
-  id: z.string({ required_error: 'Id es obligatorio' }),
+  unidadMedida: z.string({ required_error: 'La unidad de medida del insumo es obligatorio.' }),
+  id: z.number({ required_error: 'Id es obligatorio' }),
 };
 
 export const CREATE_INSUMO_SCHEMA = z.object({
@@ -16,10 +16,8 @@ export const CREATE_INSUMO_SCHEMA = z.object({
 });
 
 export const UPDATE_INSUMO_SCHEMA = z.object({
-  query: z.object({
-    id: properties.id,
-  }),
   body: z.object({
+    id: properties.id,
     nombreInusmo: properties.nombreInusmo,
     precioInusmo: properties.precioInusmo,
     unidadMedida: properties.unidadMedida, 
@@ -27,7 +25,7 @@ export const UPDATE_INSUMO_SCHEMA = z.object({
 });
 
 export const DELETE_INSUMO_SCHEMA = z.object({
-  query: z.object({
+  body: z.object({
     id: properties.id,
   }),
 });

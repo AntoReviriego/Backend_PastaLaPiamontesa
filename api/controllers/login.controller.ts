@@ -98,7 +98,8 @@ async function buildSessionDTO(session: any, user: any) {
             idRol: user.roles.id,
             permiso: (user.roles.rolpermiso ?? []).map((p: any) => ({
                 id: p.permiso.id,
-                descripcion: p.permiso.descripcion
+                descripcion: p.permiso.descripcion,
+                isConfig: p.permiso.isConfig
             }))
         },
         fechaexpiracion: session.fechaexpiracion

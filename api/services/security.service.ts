@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { Prisma } from "../config";
 import { session } from '@prisma/client';
 
@@ -42,4 +43,14 @@ export class SecurityService {
       .filter((rp: { enable: any; permiso: { enable: any; }; }) => rp.enable && rp.permiso.enable)
       .map((rp: { permiso: { descripcion: any; }; }) => rp.permiso.descripcion);
   }
+
+  async updateSessionExpiration(token: string): Promise<void> {
+    const nuevaExpiracion = DateTime.now(); // 30 minutos
+    const expiration = nuevaExpiracion.plus({ minutes: 30 });
+    await Prisma.session.updateMany({
+      where: { token },
+      data: { fechaexpiracion: expiration.toJSDate() },
+    });
+  }
+
 }

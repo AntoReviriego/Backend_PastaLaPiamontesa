@@ -6,6 +6,7 @@ import { boomErrorHandler, errorHandler, zodErrorHandler } from './middlewares';
 import { Router } from './routes';
 import { configureTimezone } from './config';
 import { bigIntToStringMiddleware } from './middlewares/bigIntToString.middleware';
+import checkSession from './middlewares/auth.middleware';
 
 const app = express();
 
@@ -15,6 +16,7 @@ configureTimezone();
 
 // Usar el middleware globalmente
 app.use(bigIntToStringMiddleware);
+// app.use(checkSession);
 
 // json parser
 app.use(express.json());
@@ -24,7 +26,7 @@ app.use(
     credentials: true,
     origin: [process.env.CLIENT_URL ?? ''],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Access-Control-Allow-Headers', 'Authorization', 'Content-Type'],
   })
 );
 
