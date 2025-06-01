@@ -86,6 +86,54 @@ export const updateInsumos: TMiddlewareParams = async (_req, res, next) => {
             },
         });
 
+        // Actualizacion de los valores del producto
+        // -- optenemos los productos relacionados al insumo
+        const composiciones = await Prisma.composicionproducto.findMany({
+            where: {
+                idinsumo: body.id,
+                enable: true,
+            },
+            select: {
+                idproducto: true,
+            },
+            distinct: ['idproducto']
+        });
+
+        for (const { idproducto } of composiciones) {
+            // 2. Obtener todos los insumos activos de ese producto
+            const insumosRelacionados = await Prisma.composicionproducto.findMany({
+                where: {
+                    idproducto: idproducto,
+                    enable: true,
+                },
+                include: {
+                    insumo: true,
+                }
+            });
+
+            // 3. Calcular nuevo costo total
+            const nuevoCostoTotal = insumosRelacionados.reduce((total, item) => {
+                return total + (Number(item.cantidad) * Number(item.insumo.preciounitario));
+            }, 0);
+
+            // 4. Obtener producto para conocer porcentaje de ganancia
+            const producto = await Prisma.producto.findUnique({
+                where: { id: idproducto },
+            });
+
+            if (producto) {
+                const nuevaPrecioVenta = nuevoCostoTotal + (nuevoCostoTotal * parseFloat(producto.porcentajeganancia.toString()) / 100);
+                // 5. Actualizar producto
+                await Prisma.producto.update({
+                    where: { id: idproducto },
+                    data: {
+                        costototal: nuevoCostoTotal,
+                        precioventa: nuevaPrecioVenta,
+                        fechaupdate: fechaActual.toJSDate()
+                    }
+                });
+            }
+        }
         return res.status(200).json(insumo);
     } catch (error) {
         return next(error);
