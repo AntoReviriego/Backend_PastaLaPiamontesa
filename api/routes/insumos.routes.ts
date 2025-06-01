@@ -9,6 +9,7 @@ import checkSession from '../middlewares/auth.middleware';
 const router: Router = express.Router();
 
 router.get('/', Controller.getInsumos);
+router.get('/all', Controller.getAllInsumos);
 router.post('/create', zodValidator(CREATE_INSUMO_SCHEMA), Controller.createInsumos);
 router.put('/update', zodValidator(UPDATE_INSUMO_SCHEMA), Controller.updateInsumos);
 router.put('/delete', zodValidator(DELETE_INSUMO_SCHEMA), Controller.removeInsumos);

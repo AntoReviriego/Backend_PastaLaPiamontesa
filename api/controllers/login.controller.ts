@@ -32,6 +32,7 @@ export const login: TMiddlewareParams = async (_req, res, next) => {
 
         if (!user) return null;
 
+
         const passOk = await bcrypt.compare(password, user.password);
 
         if (!passOk){

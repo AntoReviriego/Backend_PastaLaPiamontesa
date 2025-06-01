@@ -29,6 +29,15 @@ export const getInsumos: TMiddlewareParams = async (_req, res, next) => {
     }
 };
 
+export const getAllInsumos: TMiddlewareParams = async (_req, res, next) => {
+    try {
+        const insumos = await Prisma.insumo.findMany({ where: { enable: true } });
+        return res.status(200).json(insumos);
+    } catch (error) {
+        return next(error);
+    }
+};
+
 export const createInsumos: TMiddlewareParams = async (_req, res, next) => {
     try {
         const { body } = _req as unknown as CREATE_INSUMO_SCHEMA_TYPE;

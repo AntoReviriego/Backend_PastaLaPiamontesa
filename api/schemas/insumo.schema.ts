@@ -5,6 +5,7 @@ const properties = {
   precioInusmo: z.number({ required_error: 'El precio del insumo es obligatorio.' }),
   unidadMedida: z.string({ required_error: 'La unidad de medida del insumo es obligatorio.' }),
   id: z.number({ required_error: 'Id es obligatorio' }),
+  cantidad: z.number().optional(),
 };
 
 export const CREATE_INSUMO_SCHEMA = z.object({
