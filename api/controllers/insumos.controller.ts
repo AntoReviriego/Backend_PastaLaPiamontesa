@@ -117,7 +117,7 @@ export const updateInsumos: TMiddlewareParams = async (_req, res, next) => {
 
             // 3. Calcular nuevo costo total
             const nuevoCostoTotal = insumosRelacionados.reduce((total, item) => {
-                return total + (Number(item.cantidad) * Number(item.insumo.preciounitario));
+                return total + (Number(item.cantidad) * (Number(item.insumo.cantidadbase) / Number(item.insumo.preciounitario)));
             }, 0);
 
             // 4. Obtener producto para conocer porcentaje de ganancia
