@@ -53,6 +53,7 @@ export const createInsumos: TMiddlewareParams = async (_req, res, next) => {
             nombre: body.nombreInusmo, 
             unidadmedida: body.unidadMedida, 
             preciounitario: body.precioInusmo,
+            cantidadbase: body.cantidadInusmo,
             enable: true, 
             fechainsert: fechaActual.toJSDate(),
             fechaupdate: fechaActual.toJSDate()
@@ -70,7 +71,9 @@ export const updateInsumos: TMiddlewareParams = async (_req, res, next) => {
         const { body } = _req as unknown as UPDATE_INSUMO_SCHEMA_TYPE;
         const fechaActual = DateTime.now();
 
-        const isValid = await Prisma.insumo.findFirst({ where: { nombre: body.nombreInusmo, enable: true } })
+        const isValid = await Prisma.insumo.findFirst({ 
+            where: { nombre: body.nombreInusmo, enable: true, NOT: { id: body.id }} 
+        })
 
         if(body.nombreInusmo === isValid?.nombre && !(body.precioInusmo.toString() !== isValid?.preciounitario.toString() || isValid?.unidadmedida !== body.unidadMedida)){
             return res.status(400).json({ msg: 'Ya hay un insumos con ese nombre. Cambien el nombre o alguna propiedad del insumo' });
@@ -81,6 +84,7 @@ export const updateInsumos: TMiddlewareParams = async (_req, res, next) => {
                 nombre: body.nombreInusmo, 
                 unidadmedida: body.unidadMedida, 
                 preciounitario: body.precioInusmo,
+                cantidadbase: body.cantidadInusmo,
                 enable: true, 
                 fechaupdate: fechaActual.toJSDate()
             },

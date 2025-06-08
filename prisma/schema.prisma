@@ -28,6 +28,7 @@ model insumo {
   enable              Boolean               @default(true)
   fechainsert         DateTime              @default(now()) @db.Timestamptz(6)
   fechaupdate         DateTime              @default(now()) @db.Timestamptz(6)
+  cantidadbase        Decimal               @db.Decimal(18, 2)
   composicionproducto composicionproducto[]
 }
 
