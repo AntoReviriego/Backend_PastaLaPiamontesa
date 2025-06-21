@@ -43,7 +43,7 @@ export const createInsumos: TMiddlewareParams = async (_req, res, next) => {
         const { body } = _req as unknown as CREATE_INSUMO_SCHEMA_TYPE;
         const fechaActual = DateTime.now();
 
-        const isValid = await Prisma.insumo.findFirst({ where: { nombre: body.nombreInusmo } })
+        const isValid = await Prisma.insumo.findFirst({ where: { nombre: body.nombreInusmo, enable: true } })
         if(isValid != null ){
             return res.status(400).json({ msg: 'Ya hay un insumos con ese nombre' });
         }

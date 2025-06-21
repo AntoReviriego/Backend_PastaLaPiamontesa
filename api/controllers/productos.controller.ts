@@ -42,7 +42,7 @@ export const createProductos: TMiddlewareParams = async (_req, res, next) => {
         const { body } = _req as unknown as CREATE_PRODUCTO_SCHEMA_TYPE;
         const fechaActual = DateTime.now();
 
-        const isValid = await Prisma.producto.findFirst({ where: { nombre: body.nombreProducto } })
+        const isValid = await Prisma.producto.findFirst({ where: { nombre: body.nombreProducto, enable: true } })
         if(isValid != null ){
             return res.status(400).json({ msg: 'Ya hay un producto con ese nombre' });
         }
