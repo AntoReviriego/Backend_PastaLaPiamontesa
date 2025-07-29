@@ -7,10 +7,13 @@ export const getProductos: TMiddlewareParams = async (_req, res, next) => {
     try {
         const page = parseInt(_req.query.page as string) || 0;
         const pageSize = parseInt(_req.query.pageSize as string) || 10;
+        const ordenParam = (_req.query.orden as string)?.toLowerCase();
+        const orden = ordenParam === 'desc' ? 'desc' : 'asc';
         const skip = page * pageSize;
         const [productos, total] = await Promise.all([
             Prisma.producto.findMany({
                 where: { enable: true },
+                orderBy: { nombre: orden },
                 include: {
                     composicionproducto: {
                         where: { enable: true },
