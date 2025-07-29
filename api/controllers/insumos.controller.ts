@@ -17,7 +17,9 @@ export const getInsumos: TMiddlewareParams = async (_req, res, next) => {
                 skip,
                 take: pageSize,
             }),
-            Prisma.insumo.count()
+            Prisma.insumo.count({
+                where: { enable: true }
+            })
         ]);
 
         return res.status(200).json({       
