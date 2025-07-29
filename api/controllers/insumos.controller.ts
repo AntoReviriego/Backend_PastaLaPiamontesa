@@ -10,41 +10,22 @@ export const getInsumos: TMiddlewareParams = async (_req, res, next) => {
         const ordenParam = (_req.query.orden as string)?.toLowerCase();
         const orden = ordenParam === 'desc' ? 'desc' : 'asc';
         const skip = page * pageSize;
-        // const [insumos, total] = await Promise.all([
-        //     Prisma.insumo.findMany({
-        //         where: { enable: true },
-        //         orderBy: { nombre: orden },
-        //         skip,
-        //         take: pageSize,
-        //     }),
-        //     Prisma.insumo.count({
-        //         where: { enable: true }
-        //     })
-        // ]);
+        const [insumos, total] = await Promise.all([
+            Prisma.insumo.findMany({
+                where: { enable: true },
+                orderBy: { nombre: orden },
+                skip,
+                take: pageSize,
+            }),
+            Prisma.insumo.count()
+        ]);
 
-        // return res.status(200).json({       
-        //     data: insumos,
-        //     page,
-        //     pageSize,
-        //     total,
-        //     totalPages: Math.ceil(total / pageSize)
-        // });
-        const all = await Prisma.insumo.findMany({
-            where: { enable: true }
-        });
-
-        const sorted = all.sort((a, b) =>
-            a.nombre.localeCompare(b.nombre) * (orden === 'asc' ? 1 : -1)
-        );
-
-        const paginated = sorted.slice(skip, skip + pageSize);
-
-        return res.status(200).json({
-            data: paginated,
+        return res.status(200).json({       
+            data: insumos,
             page,
             pageSize,
-            total: sorted.length,
-            totalPages: Math.ceil(sorted.length / pageSize)
+            total,
+            totalPages: Math.ceil(total / pageSize)
         });
     } catch (error) {
         return next(error);
