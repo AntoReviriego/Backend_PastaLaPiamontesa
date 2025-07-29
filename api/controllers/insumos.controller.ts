@@ -34,7 +34,7 @@ export const getInsumos: TMiddlewareParams = async (_req, res, next) => {
         });
 
         const sorted = all.sort((a, b) =>
-        a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }) * (orden === 'asc' ? 1 : -1)
+            a.nombre.localeCompare(b.nombre) * (orden === 'asc' ? 1 : -1)
         );
 
         const paginated = sorted.slice(skip, skip + pageSize);
