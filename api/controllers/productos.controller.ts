@@ -47,7 +47,13 @@ export const createProductos: TMiddlewareParams = async (_req, res, next) => {
 
         const isValid = await Prisma.producto.findFirst({ where: { nombre: body.nombreProducto, enable: true } })
         if(isValid != null ){
-            return res.status(400).json({ msg: 'Ya hay un producto con ese nombre' });
+            const insumosParecidos = await Prisma.producto.findMany({
+            where: {
+                nombre: { contains: body.nombreProducto, mode: 'insensitive' },
+                enable: true
+            }
+            }); 
+            return res.status(400).json({ msg: 'Ya hay un producto con ese nombre', productos: insumosParecidos });
         }
 
         const PRODUCTO = await Prisma.producto.create({
